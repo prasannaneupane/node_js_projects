@@ -1,3 +1,4 @@
+
 -- CreateEnum
 CREATE TYPE "GenderEnum" AS ENUM ('Male', 'Female', 'Other');
 
