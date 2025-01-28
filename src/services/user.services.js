@@ -1,28 +1,35 @@
+import { prisma } from "../db/index.js";
 
+export const getAllUserService = async () => {
+  return await prisma.user.findMany();
+};
 
-export const userFirstService = async (args) => {
-    console.log("Reached Service layer")
-    console.log("Doing some database work")
-    const someDataFromDatabase = "MY DATA";
-    return someDataFromDatabase;
-}
+export const registerUserService = async (registerUserData) => {
+  const res = await prisma.user.create({
+    data: {
+      email: registerUserData.email,
+      fullName: registerUserData.fullName,
+      password: registerUserData.password,
+      gender: registerUserData.gender,
+    },
+  });
+  return res;
+};
 
 export const loginUserService = async (loginData) => {
-    const email = loginData.email;
-    const password = loginData.password
-    if(email =="neupaneprasanna85@gmail.com" && password=="1111"){
-        return {"message": "Login successful"}
-    }
-    else{
-        return {"message": "Login unsuccessful"}
-    }
-}
+  const email = loginData.email;
+  const password = loginData.password;
 
-const usersDataList = [
-    {   username:"Prasanna",  email: "neupaneprasanna85@gmail.com"},
-    {   username: "sujal",      email: "ss@gmail.com"} ,
-    {   username: 'aayushya',  email: "as@gmail.com"}
-]
-export const allUserService = async () => {
-    return usersDataList;
-}
+  const user = await prisma.user.findUnique({ where:{email:email} });
+  
+  if (!user) {
+    return { message: "Invalid credential" };
+  }
+
+  const checkPasword = user.password == password;
+  if (!checkPasword) {
+    return { message: "Invalid credential" };
+  }
+
+  return { message: "Login successful", user };
+};

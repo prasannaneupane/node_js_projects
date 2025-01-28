@@ -4,6 +4,7 @@ import 'dotenv/config'
 import statusCodes from "http-status-codes"
 import userRouter from "./routes/user.routes.js"
 import bodyParser from "body-parser"
+import { errorHandler } from "./libs/errorHandler.js";
 
 const app = express()
 const PORT = process.env.PORT

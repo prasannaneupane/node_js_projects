@@ -1,19 +1,32 @@
+import { StatusCodes } from "http-status-codes";
+import { getAllUserService, loginUserService, registerUserService } from "../services/user.services.js";
 
+export const getAllUserController = async (req, res) => {
+  try {
+    const data = await getAllUserService();
+    res.status(StatusCodes.OK).json(data);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 
-import  statusCodes  from "http-status-codes";
-import { userFirstService,loginUserService, allUserService } from "../services/user.services.js";
+export const registerUserController = async (req, res, next) => {
+  try {
+    const data = await registerUserService(req.body);
+    res.status(StatusCodes.ACCEPTED).json(data);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 
-export const userFirstController = async (req,res) =>{
-    const data = await userFirstService();
-    res.status(statusCodes.OK).json({message: data})
-}
-
-export const userLoginController = async (req,res) =>{
+export const userLoginController = async (req, res, next) => {
+  try {
     const data = await loginUserService(req.body);
-    res.status(statusCodes.OK).json(data)
-}
-
-export const allUserControlller = async (req,res) =>{
-    const usersData = await allUserService();
-    res.status(statusCodes.OK).json(usersData)
-}
+    res.status(StatusCodes.ACCEPTED).json(data);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
