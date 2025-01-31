@@ -30,3 +30,13 @@ export const userLoginController = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getUserProfile =async (req, res, next) => {
+  try {
+    const data = await userProfileService(req.params.userId);
+    res.status(StatusCodes.OK).json(data);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
