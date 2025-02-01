@@ -13,7 +13,7 @@ export const generateJwtToken = (userId) => {
   };
 
   try {
-    const token = jsonwebtoken.sign(payload, JWT_SECRET, options);
+    const token = jsonwebtoken.sign(payload, jwtSecret, options);
     return token;
   } catch (error) {
     throw new Error("Internal server error");
