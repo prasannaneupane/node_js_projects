@@ -1,5 +1,5 @@
 import { prisma } from "../db/index.js";
-
+import { generateJwtToken } from "../libs/jwt-utlis.js"
 import {
   checkPassword,
   generateHashForPassword,
@@ -8,8 +8,6 @@ import {
 export const getAllUserService = async () => {
   return await prisma.user.findMany();
 };
-
-
 
 export const registerUserService = async (registerUserData) => {
   const hashedPassword = await generateHashForPassword(
@@ -27,10 +25,9 @@ export const registerUserService = async (registerUserData) => {
       password: true,
     },
   });
-  return res;
+  const token = generateJwtToken(res.id);
+  return { user: res, token };
 };
-
-
 
 export const loginUserService = async (loginData) => {
   const email = loginData.email;
@@ -48,7 +45,21 @@ export const loginUserService = async (loginData) => {
   if (!isPasswordSame) {
     throw new Error("Invalid credentials", { cause: "CustomError" });
   }
+ 
+  const token = generateJwtToken(user.id);
 
   delete user.password;
-  return { message: "Login successful", user };
+  return { message: "Login successful", user, token };
+  
+};
+
+
+export const userProfileService = async (userId) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    omit: { password: true },
+  });
+  return { user };
 };

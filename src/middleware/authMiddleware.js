@@ -20,6 +20,7 @@ export const authMiddleWare = async (req, res, next) => {
     req.userId = user.id;
     next();
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

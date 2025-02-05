@@ -1,12 +1,14 @@
 import { Router } from "express";
-import { getAllUserController, getUserProfile, registerUserController, userLoginController } from "../controllers/user.controlles.js";
+import { firstcontroller, getAllUserController, getUserProfile, registerUserController, userLoginController } from "../controllers/user.controlles.js";
 import { authMiddleWare } from "../middleware/authMiddleware.js";
 
+const userRouter = Router()
 //api/users
-const userRouter = Router();
-userRouter.get("/", getAllUserController);
+userRouter.get('/', firstcontroller)
+userRouter.post('/login', userLoginController)
+userRouter.get('/details', getAllUserController)
 userRouter.post("/register",registerUserController)
-userRouter.post("/login", userLoginController);
-userRouter.get("/:userId", authMiddleWare, getUserProfile);
+userRouter.get("/:userId",authMiddleWare,getUserProfile)
+// userRouter.get('/details', getAllUser)
 
 export default userRouter;
