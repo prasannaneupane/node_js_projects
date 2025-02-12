@@ -41,21 +41,35 @@ export const errorHandler = (error, req, res, next) => {
   }
 
   if (error?.cause == "CustomError") {
-    res.status(StatusCodes.UNAUTHORIZED).json({
+    return res.status(StatusCodes.UNAUTHORIZED).json({
       error: "Unauthorized error",
       message: error.message,
     });
   }
 
+  if (error?.cause == "NotFoundCustomError") {
+    return res.status(StatusCodes.NOT_FOUND).json({
+      error: "Not found error",
+      message: error.message,
+    });
+  }
+
+  if (error?.cause == "UnauthorizedError") {
+    return res.status(StatusCodes.NOT_FOUND).json({
+      error: "Unauthorized Error",
+      message: error.message,
+    });
+  }
+
   if (error instanceof jwt.JsonWebTokenError) {
-    res.status(StatusCodes.UNAUTHORIZED).json({
+    return res.status(StatusCodes.UNAUTHORIZED).json({
       error: "Unauthorized error",
       message: "Invalid token",
     });
   }
 
   // Catch-all for unexpected errors
-  res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
     error: "Internal Server Error",
     message: "An unexpected error occurred.",
   });
