@@ -4,6 +4,7 @@ import { prisma } from "../db/index.js";
 
 const jwtSecret = process.env.JWT_SECRET
 
+
 export const authMiddleWare = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   const authToken = authHeader?.split(" ")[1];
@@ -20,7 +21,6 @@ export const authMiddleWare = async (req, res, next) => {
     req.userId = user.id;
     next();
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

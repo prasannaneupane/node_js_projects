@@ -12,6 +12,7 @@ const PORT = process.env.PORT;
 
 app.use(cors());
 app.use(bodyParser.json());
+
 app.get("/", (req, res) => {
   res.status(statusCodes.OK).json({ message: "Welcome to my app" });
 });
