@@ -17,8 +17,6 @@ export const getAllPostsController = async (req, res, next) => {
     next(error);
   }
 };
-
-
 export const createPostController = async (req, res, next) => {
   try {
     createPostSchema.parse(req.body);

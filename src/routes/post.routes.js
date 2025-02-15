@@ -13,7 +13,7 @@ import { authMiddleWare } from "../middleware/authMiddleware.js";
 const postRouter = Router();
 
 postRouter.route("/").get(authMiddleWare, getAllPostsController);
-postRouter.post("/", authMiddleWare, createPostController);
+postRouter.post("/create", authMiddleWare, createPostController);
 postRouter
   .route("/:postId")
   .get(authMiddleWare, getPostByIdController)
