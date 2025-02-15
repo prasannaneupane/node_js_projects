@@ -1,5 +1,5 @@
 import { prisma } from "../db/index.js";
-import { generateJwtToken } from "../libs/jwt-utlis.js"
+import { generateJwtToken } from "../libs/jwt-utlis.js";
 import {
   checkPassword,
   generateHashForPassword,
@@ -45,14 +45,12 @@ export const loginUserService = async (loginData) => {
   if (!isPasswordSame) {
     throw new Error("Invalid credentials", { cause: "CustomError" });
   }
- 
+
   const token = generateJwtToken(user.id);
 
   delete user.password;
   return { message: "Login successful", user, token };
-  
 };
-
 
 export const userProfileService = async (userId) => {
   const user = await prisma.user.findUnique({

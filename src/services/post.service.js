@@ -1,28 +1,27 @@
 import { prisma } from "../db/index.js";
 
-
 export const getPostService = async (query) => {
-  
   let searchTerm = "";
-
   if (query.search) {
     searchTerm = query.search;
   }
-  const allPosts = await prisma.post.findMany({
+
+  const posts = await prisma.post.findMany({
     where: {
       OR: [
-        { content: { contains: searchTerm, mode: "insensitive" } },
-        { User: { fullName: { contains: searchTerm, mode: "insensitive" } } },
+        {
+          content: { contains: searchTerm, mode: "insensitive" },
+        },
+        {
+          User: { fullName: { contains: searchTerm, mode: "insensitive" } },
+        },
       ],
     },
+    include: { User: { omit: { password: true } } },
     orderBy: { createdAt: "desc" },
-    include: {
-      User: { omit: { password: true } },
-    },
   });
-  return allPosts;
+  return posts;
 };
-
 
 export const createPostService = async (postData, userId) => {
   const posts = await prisma.post.create({
@@ -33,8 +32,6 @@ export const createPostService = async (postData, userId) => {
   });
   return posts;
 };
-
-
 
 export const getPostByIdService = async (postId) => {
   const post = await prisma.post.findUnique({ where: { id: postId } });
@@ -70,7 +67,6 @@ export const deletePostByIdService = async (postId, loggedInUserId) => {
   return { message: "Post deleted successfully" };
 };
 
-
 export const updatePostService = async (postId, loggedInUserId, updateData) => {
   const post = await prisma.post.findUnique({ where: { id: postId } });
 
@@ -86,7 +82,15 @@ export const updatePostService = async (postId, loggedInUserId, updateData) => {
   //   }
   // }
 
-
+  if (updateData.like) {
+    const data = await prisma.post.update({
+      where: { id: postId },
+      data: {
+        likesCount: post.likesCount + 1,
+      },
+    });
+    return data;
+  }
 
   // if (updateData.content) {
   //   post.content = updateData.content;
@@ -101,7 +105,6 @@ export const updatePostService = async (postId, loggedInUserId, updateData) => {
       where: { id: postId },
       data: {
         content: updateData.content,
-        likesCount: updateData.likeFlag ? post.likesCount + 1 : post.likesCount,
       },
     });
     return data;

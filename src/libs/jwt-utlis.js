@@ -2,7 +2,6 @@ import jsonwebtoken from "jsonwebtoken";
 
 const jwtSecret = process.env.JWT_SECRET
 
-
 export const generateJwtToken = (userId) => {
   const payload = {
     sub: userId,
@@ -12,7 +11,7 @@ export const generateJwtToken = (userId) => {
   const options = {
     expiresIn: "2h",
   };
-  
+
   try {
     const token = jsonwebtoken.sign(payload, jwtSecret, options);
     return token;
